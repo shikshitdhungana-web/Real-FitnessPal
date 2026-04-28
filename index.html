@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <!-- viewport meta tag is essential for mobile-friendly pages -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FitTrack — 12-Week Summer Plan</title>
+
+  <style>
+    /* ════════════════════════════════════════
+       CSS VARIABLES
+       Define all colours in one place so it's
+       easy to restyle the whole app later.
+    ════════════════════════════════════════ */
+    :root {
+      --primary:    #4f46e5;   /* indigo */
+      --primary-dk: #3730a3;   /* darker indigo for header */
+      --primary-lt: #e0e7ff;   /* light indigo for card header bg */
+      --bg:         #f1f5f9;   /* light grey page background */
+      --card:       #ffffff;
+      --text:       #1e293b;
+      --muted:      #64748b;
+      --border:     #e2e8f0;
+      --danger:     #ef4444;
+      --danger-lt:  #fee2e2;
+      --success:    #22c55e;
+      --radius:     12px;
+    }
+
+    /* ════════════════════════════════════════
+       RESET
+       Removes default browser spacing so we
+       control every pixel ourselves.
+    ════════════════════════════════════════ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden; /* prevent any horizontal scrolling on the page */
+    }
+
+    /* ════════════════════════════════════════
+       APP HEADER
+    ════════════════════════════════════════ */
+    .app-header {
+      background: linear-gradient(135deg, var(--primary-dk), var(--primary));
+      color: white;
+      padding: 20px 16px 16px;
+      text-align: center;
+    }
+    .app-header h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; }
+    .app-header p  { font-size: 0.85rem; opacity: 0.8; margin-top: 3px; }
+
+    /* ════════════════════════════════════════
+       SELECTOR PANEL (week grid + day tabs)
+       Stays in the same dark header colour so
+       it feels like one unified top section.
+    ════════════════════════════════════════ */
+    .selectors {
+      background: var(--primary-dk);
+      padding: 0 16px 16px;
+    }
+
+    /* Small uppercase labels above each selector */
+    .selector-label {
+      color: rgba(255,255,255,0.65);
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 7px;
+    }
+
+    /* ── Week Grid ──
+       12 buttons in a 6-column grid.
+       On very small phones (< 380px) we drop to 4 columns. */
+    .week-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+    .week-btn {
+      background: rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.75);
+      border: 1.5px solid transparent;
+      border-radius: 8px;
+      padding: 8px 4px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 42px;        /* large enough to tap comfortably */
+      transition: background 0.15s, color 0.15s;
+    }
+    .week-btn:hover  { background: rgba(255,255,255,0.22); }
+    .week-btn.active {
+      background: #fff;
+      color: var(--primary);
+      border-color: #fff;
+    }
+
+    /* ── Day Tabs ──
+       3 equal-width buttons in a row. */
+    .day-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .day-btn {
+      background: rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.8);
+      border: none;
+      border-radius: 10px;
+      padding: 12px 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 50px;        /* big tap target for mobile */
+      transition: background 0.15s, color 0.15s;
+    }
+    .day-btn:hover  { background: rgba(255,255,255,0.22); }
+    .day-btn.active {
+      background: #fff;
+      color: var(--primary);
+    }
+
+    /* ════════════════════════════════════════
+       WORKOUT AREA
+    ════════════════════════════════════════ */
+    .workout-area {
+      padding: 16px;
+      max-width: 640px; /* cap width on big screens; centers nicely on desktop */
+      margin: 0 auto;
+    }
+
+    /* Title row: "Week 1 · Day 1" on left, exercise count on right */
+    .workout-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+    .workout-info-title { font-weight: 700; font-size: 1rem; }
+    .workout-info-count { font-size: 0.82rem; color: var(--muted); }
+
+    /* ════════════════════════════════════════
+       EXERCISE CARD
+    ════════════════════════════════════════ */
+    .exercise-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      margin-bottom: 14px;
+      overflow: hidden; /* so the coloured header respects border-radius */
+    }
+
+    /* Coloured banner at the top of each card */
+    .exercise-header {
+      background: var(--primary-lt);
+      border-left: 4px solid var(--primary);
+      padding: 11px 14px;
+    }
+    .exercise-name {
+      font-size: 0.975rem;
+      font-weight: 700;
+      color: var(--primary-dk);
+    }
+
+    /* Body of the card: sets + notes */
+    .exercise-body { padding: 12px 14px 14px; }
+
+    /* ── Column headers above the set rows ── */
+    .set-header {
+      display: grid;
+      grid-template-columns: 32px 1fr 1fr 42px;
+      gap: 6px;
+      margin-bottom: 5px;
+    }
+    .set-header span {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      text-align: center;
+    }
+    .set-header span:first-child { text-align: left; }
+
+    /* ── Individual set row ── */
+    .set-row {
+      display: grid;
+      grid-template-columns: 32px 1fr 1fr 42px;
+      gap: 6px;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    /* The "1", "2", "3" set number label */
+    .set-number {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-align: center;
+      padding-top: 2px;
+    }
+
+    /* Weight and reps number inputs */
+    .set-input {
+      width: 100%;
+      min-height: 46px;        /* large touch target */
+      padding: 10px 6px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+      text-align: center;
+      color: var(--text);
+      background: #fff;
+      outline: none;
+      /* Remove the ugly browser spin arrows on number inputs */
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+    .set-input::-webkit-inner-spin-button,
+    .set-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+    .set-input:focus { border-color: var(--primary); }
+
+    /* ── Delete set button ── */
+    .delete-set-btn {
+      width: 36px;
+      height: 36px;
+      border: 1.5px solid var(--danger);
+      background: none;
+      color: var(--danger);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: auto;
+      transition: background 0.15s;
+      flex-shrink: 0;
+    }
+    .delete-set-btn:hover { background: var(--danger-lt); }
+
+    /* Grey out the delete button when there is only 1 set left */
+    .sets-container .set-row:only-child .delete-set-btn {
+      opacity: 0.25;
+      pointer-events: none;
+      cursor: default;
+    }
+
+    /* ── Add Set button ── */
+    .add-set-btn {
+      width: 100%;
+      min-height: 46px;
+      margin-top: 4px;
+      border: 2px dashed var(--border);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--primary);
+      font-size: 0.875rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .add-set-btn:hover {
+      background: var(--primary-lt);
+      border-color: var(--primary);
+    }
+
+    /* ── Notes section ── */
+    .notes-label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin: 12px 0 5px;
+    }
+    .notes-input {
+      width: 100%;
+      padding: 10px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-family: inherit;
+      color: var(--text);
+      resize: vertical;          /* user can make it taller but not wider */
+      min-height: 64px;
+      outline: none;
+      max-width: 100%;           /* never wider than its container */
+    }
+    .notes-input:focus { border-color: var(--primary); }
+    .notes-input::placeholder { color: #94a3b8; }
+
+    /* ════════════════════════════════════════
+       BOTTOM ACTION BAR
+    ════════════════════════════════════════ */
+    .action-bar {
+      margin-top: 8px;
+      padding-bottom: 40px;  /* extra space so last card isn't right at the bottom */
+    }
+
+    .clear-btn {
+      width: 100%;
+      min-height: 52px;
+      padding: 14px;
+      border: 2px solid var(--danger);
+      background: #fff;
+      color: var(--danger);
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .clear-btn:hover { background: var(--danger-lt); }
+
+    /* ════════════════════════════════════════
+       TOAST NOTIFICATION
+       Slides up from the bottom when data is
+       saved or cleared.
+    ════════════════════════════════════════ */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      /* start hidden below the screen */
+      transform: translateX(-50%) translateY(100px);
+      background: #1e293b;
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: 999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      z-index: 9999;
+      pointer-events: none;
+      white-space: nowrap;
+      transition: transform 0.28s ease;
+    }
+    /* Adding this class slides it into view */
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ════════════════════════════════════════
+       RESPONSIVE — very small phones
+    ════════════════════════════════════════ */
+    @media (max-width: 379px) {
+      /* Drop from 6 to 4 week columns so buttons stay tappable */
+      .week-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══════════════════════════════════════
+       APP HEADER
+  ══════════════════════════════════════ -->
+  <header class="app-header">
+    <h1>🏋️ FitTrack</h1>
+    <p>12-Week Summer Fitness Plan</p>
+  </header>
+
+  <!-- ══════════════════════════════════════
+       WEEK & DAY SELECTORS
+  ══════════════════════════════════════ -->
+  <div class="selectors">
+
+    <p class="selector-label">Select Week</p>
+
+    <!-- 12 week buttons — filled in by JavaScript below -->
+    <div class="week-grid" id="week-grid"></div>
+
+    <!-- 3 day tab buttons -->
+    <div class="day-tabs" id="day-tabs">
+      <button class="day-btn" data-day="1">Day 1</button>
+      <button class="day-btn" data-day="2">Day 2</button>
+      <button class="day-btn" data-day="3">Day 3</button>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════
+       MAIN WORKOUT AREA
+  ══════════════════════════════════════ -->
+  <div class="workout-area">
+
+    <!-- Info bar: title on left, count on right -->
+    <div class="workout-info">
+      <span class="workout-info-title" id="workout-title">Week 1 · Day 1</span>
+      <span class="workout-info-count" id="workout-count"></span>
+    </div>
+
+    <!-- Exercise cards are injected here by JavaScript -->
+    <div id="exercises-container"></div>
+
+    <!-- Clear button -->
+    <div class="action-bar">
+      <button class="clear-btn" onclick="clearWorkout()">🗑&nbsp; Clear This Workout</button>
+    </div>
+
+  </div>
+
+  <!-- Toast pop-up (hidden by default) -->
+  <div class="toast" id="toast">Saved ✓</div>
+
+
+  <!-- ══════════════════════════════════════
+       JAVASCRIPT
+  ══════════════════════════════════════ -->
+  <script>
+
+    /* ────────────────────────────────────────
+       WORKOUT PLAN DATA
+       The exercises for each of the 3 days.
+       Change these arrays if you update your
+       routine — the rest of the app adapts.
+    ──────────────────────────────────────── */
+    const WORKOUTS = {
+      1: [
+        "Lat Pulldown",
+        "Dumbbell Bench Press",
+        "Cable Rows",
+        "Cuban Press",
+        "Standing Barbell Curls",
+        "Hack Squat"
+      ],
+      2: [
+        "Dumbbell Deadlift / Romanian Deadlift",
+        "Dumbbell Overhead Press",
+        "Deficit Pushups",
+        "Leg Extensions"
+      ],
+      3: [
+        "Lat Pulldown",
+        "Incline Dumbbell Bench Press",
+        "Machine Lateral Raises",
+        "Tricep Extension"
+      ]
+    };
+
+    /* ────────────────────────────────────────
+       APP STATE
+       currentWeek and currentDay track which
+       session the user is viewing right now.
+    ──────────────────────────────────────── */
+    let currentWeek = 1;
+    let currentDay  = 1;
+
+    /* ────────────────────────────────────────
+       LOCALSTORAGE HELPERS
+       localStorage stores key-value pairs in
+       the browser — data persists even after
+       the page is closed and reopened.
+    ──────────────────────────────────────── */
+
+    // Build a unique key like "fittrack_w3_d2"
+    function getKey(week, day) {
+      return `fittrack_w${week}_d${day}`;
+    }
+
+    // Return saved JSON for week/day, or a default object if nothing saved yet
+    function loadData(week, day) {
+      const raw = localStorage.getItem(getKey(week, day));
+      if (raw) {
+        try { return JSON.parse(raw); } catch (e) { /* ignore corrupted data */ }
+      }
+      // No saved data: build a default with one empty set per exercise
+      const defaults = {};
+      WORKOUTS[day].forEach(name => {
+        defaults[name] = { sets: [{ weight: '', reps: '' }], notes: '' };
+      });
+      return defaults;
+    }
+
+    // Read the current DOM and save everything to localStorage
+    function saveData() {
+      const result = {};
+
+      document.querySelectorAll('.exercise-card').forEach(card => {
+        const name = card.dataset.exercise;
+        const sets = [];
+        card.querySelectorAll('.set-row').forEach(row => {
+          sets.push({
+            weight: row.querySelector('.weight-input').value,
+            reps:   row.querySelector('.reps-input').value
+          });
+        });
+        result[name] = {
+          sets,
+          notes: card.querySelector('.notes-input').value
+        };
+      });
+
+      localStorage.setItem(getKey(currentWeek, currentDay), JSON.stringify(result));
+      showToast('Saved ✓');
+    }
+
+    /* ────────────────────────────────────────
+       TOAST NOTIFICATION
+       Shows a small pop-up message at the
+       bottom of the screen for 1.8 seconds.
+    ──────────────────────────────────────── */
+    let toastTimer;
+    function showToast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.classList.remove('show'), 1800);
+    }
+
+    /* ────────────────────────────────────────
+       SET ROW
+       Creates one row in the sets table:
+       [Set #] [Weight input] [Reps input] [✕]
+    ──────────────────────────────────────── */
+    function createSetRow(index, data) {
+      const row = document.createElement('div');
+      row.className = 'set-row';
+      row.dataset.set = index;
+
+      row.innerHTML = `
+        <span class="set-number">${index + 1}</span>
+        <input class="set-input weight-input"
+               type="number" inputmode="decimal"
+               placeholder="lbs/kg" min="0" step="any"
+               value="${data.weight || ''}" />
+        <input class="set-input reps-input"
+               type="number" inputmode="numeric"
+               placeholder="reps" min="0"
+               value="${data.reps || ''}" />
+        <button class="delete-set-btn" title="Delete set" aria-label="Delete set">✕</button>
+      `;
+
+      // Auto-save whenever the user changes a value
+      row.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', saveData);
+      });
+
+      // Delete this row when the ✕ button is clicked
+      row.querySelector('.delete-set-btn').addEventListener('click', () => {
+        const container = row.closest('.sets-container');
+        // Never delete the last remaining set
+        if (container.querySelectorAll('.set-row').length > 1) {
+          row.remove();
+          renumberSets(container); // fix the "1, 2, 3..." labels after deletion
+          saveData();
+        }
+      });
+
+      return row;
+    }
+
+    // After adding or removing a row, update the "Set 1, Set 2..." labels
+    function renumberSets(container) {
+      container.querySelectorAll('.set-row').forEach((row, i) => {
+        row.querySelector('.set-number').textContent = i + 1;
+        row.dataset.set = i;
+      });
+    }
+
+    /* ────────────────────────────────────────
+       EXERCISE CARD
+       Builds a complete card for one exercise:
+       coloured header, set table, notes field.
+    ──────────────────────────────────────── */
+    function createExerciseCard(exerciseName, exerciseData) {
+      const card = document.createElement('div');
+      card.className = 'exercise-card';
+      card.dataset.exercise = exerciseName; // used by saveData() to identify this card
+
+      /* ── Coloured header band ── */
+      const header = document.createElement('div');
+      header.className = 'exercise-header';
+      header.innerHTML = `<h3 class="exercise-name">${exerciseName}</h3>`;
+      card.appendChild(header);
+
+      /* ── Card body ── */
+      const body = document.createElement('div');
+      body.className = 'exercise-body';
+
+      /* Column labels: Set / Weight / Reps */
+      const colHeaders = document.createElement('div');
+      colHeaders.className = 'set-header';
+      colHeaders.innerHTML = `
+        <span>Set</span>
+        <span>Weight</span>
+        <span>Reps</span>
+        <span></span>
+      `;
+      body.appendChild(colHeaders);
+
+      /* Container that holds all the individual set rows */
+      const setsContainer = document.createElement('div');
+      setsContainer.className = 'sets-container';
+
+      // Render each saved set (or the single default empty set)
+      exerciseData.sets.forEach((setData, i) => {
+        setsContainer.appendChild(createSetRow(i, setData));
+      });
+      body.appendChild(setsContainer);
+
+      /* "Add Set" button */
+      const addBtn = document.createElement('button');
+      addBtn.className = 'add-set-btn';
+      addBtn.textContent = '+ Add Set';
+      addBtn.addEventListener('click', () => {
+        const newIndex = setsContainer.querySelectorAll('.set-row').length;
+        setsContainer.appendChild(createSetRow(newIndex, { weight: '', reps: '' }));
+        saveData();
+      });
+      body.appendChild(addBtn);
+
+      /* Notes label + textarea */
+      const notesLabel = document.createElement('span');
+      notesLabel.className = 'notes-label';
+      notesLabel.textContent = 'Notes';
+      body.appendChild(notesLabel);
+
+      const notesInput = document.createElement('textarea');
+      notesInput.className = 'notes-input';
+      notesInput.placeholder = 'e.g. increase weight next week, felt strong today…';
+      notesInput.value = exerciseData.notes || '';
+      notesInput.addEventListener('input', saveData);
+      body.appendChild(notesInput);
+
+      card.appendChild(body);
+      return card;
+    }
+
+    /* ────────────────────────────────────────
+       RENDER EXERCISES
+       Clears the exercise container and rebuilds
+       it with the saved data for currentWeek/Day.
+       Called on page load and whenever the user
+       switches week or day.
+    ──────────────────────────────────────── */
+    function renderExercises() {
+      const container = document.getElementById('exercises-container');
+      container.innerHTML = ''; // wipe previous cards
+
+      const data      = loadData(currentWeek, currentDay);
+      const exercises = WORKOUTS[currentDay];
+
+      exercises.forEach(name => {
+        // Use saved data if available, otherwise fall back to a single empty set
+        const exerciseData = data[name] || { sets: [{ weight: '', reps: '' }], notes: '' };
+        container.appendChild(createExerciseCard(name, exerciseData));
+      });
+
+      // Update the info bar text
+      document.getElementById('workout-title').textContent =
+        `Week ${currentWeek} · Day ${currentDay}`;
+      document.getElementById('workout-count').textContent =
+        `${exercises.length} exercise${exercises.length !== 1 ? 's' : ''}`;
+    }
+
+    /* ────────────────────────────────────────
+       CLEAR WORKOUT
+       Asks for confirmation, then wipes the
+       saved data for the current week/day only.
+    ──────────────────────────────────────── */
+    function clearWorkout() {
+      const confirmed = window.confirm(
+        `Clear all data for Week ${currentWeek}, Day ${currentDay}?\nThis cannot be undone.`
+      );
+      if (!confirmed) return;
+      localStorage.removeItem(getKey(currentWeek, currentDay));
+      renderExercises();
+      showToast('Cleared');
+    }
+
+    /* ────────────────────────────────────────
+       BUILD WEEK GRID
+       Creates 12 "W1"…"W12" buttons dynamically
+       instead of writing them all in the HTML.
+    ──────────────────────────────────────── */
+    function buildWeekGrid() {
+      const grid = document.getElementById('week-grid');
+
+      for (let w = 1; w <= 12; w++) {
+        const btn = document.createElement('button');
+        btn.className   = 'week-btn' + (w === 1 ? ' active' : '');
+        btn.dataset.week = w;
+        btn.textContent  = `W${w}`;
+
+        btn.addEventListener('click', () => {
+          if (currentWeek === w) return; // already on this week, do nothing
+          currentWeek = w;
+
+          // Move the active highlight to this button
+          document.querySelectorAll('.week-btn')
+                  .forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          renderExercises();
+
+          // Scroll to the top of the page so the workout list is visible
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        grid.appendChild(btn);
+      }
+    }
+
+    /* ────────────────────────────────────────
+       WIRE UP DAY TABS
+       The three Day 1/2/3 buttons in the HTML
+       need click handlers.
+    ──────────────────────────────────────── */
+    function initDayTabs() {
+      document.querySelectorAll('.day-btn').forEach(btn => {
+        const day = parseInt(btn.dataset.day, 10);
+
+        // Mark Day 1 active on initial load
+        if (day === 1) btn.classList.add('active');
+
+        btn.addEventListener('click', () => {
+          if (currentDay === day) return;
+          currentDay = day;
+
+          document.querySelectorAll('.day-btn')
+                  .forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          renderExercises();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+    }
+
+    /* ────────────────────────────────────────
+       START THE APP
+       These three calls kick everything off
+       when the page first loads.
+    ──────────────────────────────────────── */
+    buildWeekGrid();
+    initDayTabs();
+    renderExercises();
+
+  </script>
+
+</body>
+</html>
