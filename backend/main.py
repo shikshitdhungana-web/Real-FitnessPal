@@ -54,7 +54,8 @@ app.add_middleware(
     allow_origins=["*"],   # Allow any origin (fine for local development).
                            # In production, replace "*" with your actual
                            # frontend URL, e.g. "https://mysite.com"
-    allow_credentials=True,
+                           # NOTE: allow_credentials must NOT be True when
+                           # allow_origins is "*" — browsers reject that combo.
     allow_methods=["*"],   # Allow GET, POST, DELETE, etc.
     allow_headers=["*"],
 )

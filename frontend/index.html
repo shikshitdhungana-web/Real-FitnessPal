@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <!-- viewport meta tag is essential for mobile-friendly pages -->
@@ -13,18 +14,22 @@
        easy to restyle the whole app later.
     ════════════════════════════════════════ */
     :root {
-      --primary:    #4f46e5;   /* indigo */
-      --primary-dk: #3730a3;   /* darker indigo for header */
-      --primary-lt: #e0e7ff;   /* light indigo for card header bg */
-      --bg:         #f1f5f9;   /* light grey page background */
-      --card:       #ffffff;
-      --text:       #1e293b;
-      --muted:      #64748b;
-      --border:     #e2e8f0;
-      --danger:     #ef4444;
-      --danger-lt:  #fee2e2;
-      --success:    #22c55e;
-      --radius:     12px;
+      --primary: #4f46e5;
+      /* indigo */
+      --primary-dk: #3730a3;
+      /* darker indigo for header */
+      --primary-lt: #e0e7ff;
+      /* light indigo for card header bg */
+      --bg: #f1f5f9;
+      /* light grey page background */
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --danger: #ef4444;
+      --danger-lt: #fee2e2;
+      --success: #22c55e;
+      --radius: 12px;
     }
 
     /* ════════════════════════════════════════
@@ -32,7 +37,9 @@
        Removes default browser spacing so we
        control every pixel ourselves.
     ════════════════════════════════════════ */
-    *, *::before, *::after {
+    *,
+    *::before,
+    *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
@@ -43,7 +50,8 @@
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      overflow-x: hidden; /* prevent any horizontal scrolling on the page */
+      overflow-x: hidden;
+      /* prevent any horizontal scrolling on the page */
     }
 
     /* ════════════════════════════════════════
@@ -55,8 +63,18 @@
       padding: 20px 16px 16px;
       text-align: center;
     }
-    .app-header h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; }
-    .app-header p  { font-size: 0.85rem; opacity: 0.8; margin-top: 3px; }
+
+    .app-header h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .app-header p {
+      font-size: 0.85rem;
+      opacity: 0.8;
+      margin-top: 3px;
+    }
 
     /* ════════════════════════════════════════
        SELECTOR PANEL (week grid + day tabs)
@@ -70,7 +88,7 @@
 
     /* Small uppercase labels above each selector */
     .selector-label {
-      color: rgba(255,255,255,0.65);
+      color: rgba(255, 255, 255, 0.65);
       font-size: 0.7rem;
       font-weight: 700;
       text-transform: uppercase;
@@ -87,19 +105,25 @@
       gap: 6px;
       margin-bottom: 14px;
     }
+
     .week-btn {
-      background: rgba(255,255,255,0.12);
-      color: rgba(255,255,255,0.75);
+      background: rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.75);
       border: 1.5px solid transparent;
       border-radius: 8px;
       padding: 8px 4px;
       font-size: 0.8rem;
       font-weight: 700;
       cursor: pointer;
-      min-height: 42px;        /* large enough to tap comfortably */
+      min-height: 42px;
+      /* large enough to tap comfortably */
       transition: background 0.15s, color 0.15s;
     }
-    .week-btn:hover  { background: rgba(255,255,255,0.22); }
+
+    .week-btn:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
+
     .week-btn.active {
       background: #fff;
       color: var(--primary);
@@ -113,19 +137,25 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 8px;
     }
+
     .day-btn {
-      background: rgba(255,255,255,0.12);
-      color: rgba(255,255,255,0.8);
+      background: rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.8);
       border: none;
       border-radius: 10px;
       padding: 12px 8px;
       font-size: 0.9rem;
       font-weight: 700;
       cursor: pointer;
-      min-height: 50px;        /* big tap target for mobile */
+      min-height: 50px;
+      /* big tap target for mobile */
       transition: background 0.15s, color 0.15s;
     }
-    .day-btn:hover  { background: rgba(255,255,255,0.22); }
+
+    .day-btn:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
+
     .day-btn.active {
       background: #fff;
       color: var(--primary);
@@ -136,7 +166,8 @@
     ════════════════════════════════════════ */
     .workout-area {
       padding: 16px;
-      max-width: 640px; /* cap width on big screens; centers nicely on desktop */
+      max-width: 640px;
+      /* cap width on big screens; centers nicely on desktop */
       margin: 0 auto;
     }
 
@@ -149,8 +180,16 @@
       gap: 6px;
       margin-bottom: 14px;
     }
-    .workout-info-title { font-weight: 700; font-size: 1rem; }
-    .workout-info-count { font-size: 0.82rem; color: var(--muted); }
+
+    .workout-info-title {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .workout-info-count {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
 
     /* ════════════════════════════════════════
        EXERCISE CARD
@@ -158,9 +197,10 @@
     .exercise-card {
       background: var(--card);
       border-radius: var(--radius);
-      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
       margin-bottom: 14px;
-      overflow: hidden; /* so the coloured header respects border-radius */
+      overflow: hidden;
+      /* so the coloured header respects border-radius */
     }
 
     /* Coloured banner at the top of each card */
@@ -169,6 +209,7 @@
       border-left: 4px solid var(--primary);
       padding: 11px 14px;
     }
+
     .exercise-name {
       font-size: 0.975rem;
       font-weight: 700;
@@ -176,7 +217,9 @@
     }
 
     /* Body of the card: sets + notes */
-    .exercise-body { padding: 12px 14px 14px; }
+    .exercise-body {
+      padding: 12px 14px 14px;
+    }
 
     /* ── Column headers above the set rows ── */
     .set-header {
@@ -185,6 +228,7 @@
       gap: 6px;
       margin-bottom: 5px;
     }
+
     .set-header span {
       font-size: 0.68rem;
       font-weight: 700;
@@ -193,7 +237,10 @@
       color: var(--muted);
       text-align: center;
     }
-    .set-header span:first-child { text-align: left; }
+
+    .set-header span:first-child {
+      text-align: left;
+    }
 
     /* ── Individual set row ── */
     .set-row {
@@ -216,7 +263,8 @@
     /* Weight and reps number inputs */
     .set-input {
       width: 100%;
-      min-height: 46px;        /* large touch target */
+      min-height: 46px;
+      /* large touch target */
       padding: 10px 6px;
       border: 1.5px solid var(--border);
       border-radius: 8px;
@@ -229,9 +277,15 @@
       -moz-appearance: textfield;
       appearance: textfield;
     }
+
     .set-input::-webkit-inner-spin-button,
-    .set-input::-webkit-outer-spin-button { -webkit-appearance: none; }
-    .set-input:focus { border-color: var(--primary); }
+    .set-input::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+    }
+
+    .set-input:focus {
+      border-color: var(--primary);
+    }
 
     /* ── Delete set button ── */
     .delete-set-btn {
@@ -250,7 +304,10 @@
       transition: background 0.15s;
       flex-shrink: 0;
     }
-    .delete-set-btn:hover { background: var(--danger-lt); }
+
+    .delete-set-btn:hover {
+      background: var(--danger-lt);
+    }
 
     /* Grey out the delete button when there is only 1 set left */
     .sets-container .set-row:only-child .delete-set-btn {
@@ -273,6 +330,7 @@
       cursor: pointer;
       transition: background 0.15s, border-color 0.15s;
     }
+
     .add-set-btn:hover {
       background: var(--primary-lt);
       border-color: var(--primary);
@@ -288,6 +346,7 @@
       letter-spacing: 0.05em;
       margin: 12px 0 5px;
     }
+
     .notes-input {
       width: 100%;
       padding: 10px;
@@ -296,20 +355,29 @@
       font-size: 0.875rem;
       font-family: inherit;
       color: var(--text);
-      resize: vertical;          /* user can make it taller but not wider */
+      resize: vertical;
+      /* user can make it taller but not wider */
       min-height: 64px;
       outline: none;
-      max-width: 100%;           /* never wider than its container */
+      max-width: 100%;
+      /* never wider than its container */
     }
-    .notes-input:focus { border-color: var(--primary); }
-    .notes-input::placeholder { color: #94a3b8; }
+
+    .notes-input:focus {
+      border-color: var(--primary);
+    }
+
+    .notes-input::placeholder {
+      color: #94a3b8;
+    }
 
     /* ════════════════════════════════════════
        BOTTOM ACTION BAR
     ════════════════════════════════════════ */
     .action-bar {
       margin-top: 8px;
-      padding-bottom: 40px;  /* extra space so last card isn't right at the bottom */
+      padding-bottom: 40px;
+      /* extra space so last card isn't right at the bottom */
     }
 
     .clear-btn {
@@ -325,7 +393,10 @@
       cursor: pointer;
       transition: background 0.15s;
     }
-    .clear-btn:hover { background: var(--danger-lt); }
+
+    .clear-btn:hover {
+      background: var(--danger-lt);
+    }
 
     /* ════════════════════════════════════════
        TOAST NOTIFICATION
@@ -349,15 +420,21 @@
       white-space: nowrap;
       transition: transform 0.28s ease;
     }
+
     /* Adding this class slides it into view */
-    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
 
     /* ════════════════════════════════════════
        RESPONSIVE — very small phones
     ════════════════════════════════════════ */
     @media (max-width: 379px) {
+
       /* Drop from 6 to 4 week columns so buttons stay tappable */
-      .week-grid { grid-template-columns: repeat(4, 1fr); }
+      .week-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
     }
   </style>
 </head>
@@ -427,6 +504,7 @@
        Change these arrays if you update your
        routine — the rest of the app adapts.
     ──────────────────────────────────────── */
+    const API_URL = "http://127.0.0.1:8000";
     const WORKOUTS = {
       1: [
         "Lat Pulldown",
@@ -450,13 +528,14 @@
       ]
     };
 
+
     /* ────────────────────────────────────────
        APP STATE
        currentWeek and currentDay track which
        session the user is viewing right now.
     ──────────────────────────────────────── */
     let currentWeek = 1;
-    let currentDay  = 1;
+    let currentDay = 1;
 
     /* ────────────────────────────────────────
        LOCALSTORAGE HELPERS
@@ -470,42 +549,100 @@
       return `fittrack_w${week}_d${day}`;
     }
 
-    // Return saved JSON for week/day, or a default object if nothing saved yet
-    function loadData(week, day) {
+    // Try the backend first; fall back to localStorage if the server is unreachable.
+    async function loadData(week, day) {
+      try {
+        const response = await fetch(`${API_URL}/workouts/${week}/${day}`);
+        if (response.ok) {
+          const result = await response.json();
+          // Backend returned real data — use it and keep localStorage in sync
+          if (Object.keys(result.exercises).length > 0) {
+            localStorage.setItem(getKey(week, day), JSON.stringify(result.exercises));
+            return result.exercises;
+          }
+        }
+      } catch (e) {
+        // Server not running — silently fall through to localStorage
+        console.warn('Backend unreachable, loading from localStorage');
+      }
+
+      // localStorage fallback
       const raw = localStorage.getItem(getKey(week, day));
       if (raw) {
         try { return JSON.parse(raw); } catch (e) { /* ignore corrupted data */ }
       }
-      // No saved data: build a default with one empty set per exercise
+
+      // Nothing saved anywhere yet — build empty defaults
       const defaults = {};
       WORKOUTS[day].forEach(name => {
         defaults[name] = { sets: [{ weight: '', reps: '' }], notes: '' };
       });
       return defaults;
     }
-
-    // Read the current DOM and save everything to localStorage
-    function saveData() {
+    async function saveData() {
       const result = {};
 
+      // collect data from UI
       document.querySelectorAll('.exercise-card').forEach(card => {
         const name = card.dataset.exercise;
         const sets = [];
-        card.querySelectorAll('.set-row').forEach(row => {
+
+        card.querySelectorAll('.set-row').forEach((row, index) => {
           sets.push({
-            weight: row.querySelector('.weight-input').value,
-            reps:   row.querySelector('.reps-input').value
+            set_number: index + 1,
+            weight: parseFloat(row.querySelector('.weight-input').value) || null,
+            reps: parseInt(row.querySelector('.reps-input').value) || null
           });
         });
+
         result[name] = {
-          sets,
+          sets: sets,
           notes: card.querySelector('.notes-input').value
         };
       });
 
+      // save locally (keep this)
       localStorage.setItem(getKey(currentWeek, currentDay), JSON.stringify(result));
-      showToast('Saved ✓');
+
+      try {
+        const response = await fetch(API_URL + "/workouts", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            week: currentWeek,
+            day: currentDay,
+            exercises: Object.entries(result).map(([exercise_name, value]) => ({
+              exercise_name: exercise_name,
+              notes: value.notes || "",
+              sets: value.sets.map((s, i) => ({
+                set_number: i + 1,
+                weight: s.weight,
+                reps: s.reps
+              }))
+            }))
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error("Backend save failed");
+        }
+
+        showToast("Saved ✓");
+
+      } catch (error) {
+        console.error(error);
+        showToast("Saved locally only");
+      }
     }
+
+
+
+
+    // Read the current DOM and save everything to localStorage
+
+
 
     /* ────────────────────────────────────────
        TOAST NOTIFICATION
@@ -647,11 +784,11 @@
        Called on page load and whenever the user
        switches week or day.
     ──────────────────────────────────────── */
-    function renderExercises() {
+    async function renderExercises() {
       const container = document.getElementById('exercises-container');
       container.innerHTML = ''; // wipe previous cards
 
-      const data      = loadData(currentWeek, currentDay);
+      const data = await loadData(currentWeek, currentDay);  // must await — backend call is async
       const exercises = WORKOUTS[currentDay];
 
       exercises.forEach(name => {
@@ -672,13 +809,25 @@
        Asks for confirmation, then wipes the
        saved data for the current week/day only.
     ──────────────────────────────────────── */
-    function clearWorkout() {
+    async function clearWorkout() {
       const confirmed = window.confirm(
         `Clear all data for Week ${currentWeek}, Day ${currentDay}?\nThis cannot be undone.`
       );
       if (!confirmed) return;
+
+      // Wipe localStorage
       localStorage.removeItem(getKey(currentWeek, currentDay));
-      renderExercises();
+
+      // Also delete from the backend database
+      try {
+        await fetch(`${API_URL}/workouts/${currentWeek}/${currentDay}`, {
+          method: 'DELETE'
+        });
+      } catch (e) {
+        console.warn('Backend unreachable, cleared locally only');
+      }
+
+      await renderExercises();
       showToast('Cleared');
     }
 
@@ -692,20 +841,20 @@
 
       for (let w = 1; w <= 12; w++) {
         const btn = document.createElement('button');
-        btn.className   = 'week-btn' + (w === 1 ? ' active' : '');
+        btn.className = 'week-btn' + (w === 1 ? ' active' : '');
         btn.dataset.week = w;
-        btn.textContent  = `W${w}`;
+        btn.textContent = `W${w}`;
 
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', async () => {
           if (currentWeek === w) return; // already on this week, do nothing
           currentWeek = w;
 
           // Move the active highlight to this button
           document.querySelectorAll('.week-btn')
-                  .forEach(b => b.classList.remove('active'));
+            .forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
 
-          renderExercises();
+          await renderExercises();
 
           // Scroll to the top of the page so the workout list is visible
           window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -727,15 +876,15 @@
         // Mark Day 1 active on initial load
         if (day === 1) btn.classList.add('active');
 
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', async () => {
           if (currentDay === day) return;
           currentDay = day;
 
           document.querySelectorAll('.day-btn')
-                  .forEach(b => b.classList.remove('active'));
+            .forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
 
-          renderExercises();
+          await renderExercises();
           window.scrollTo({ top: 0, behavior: 'smooth' });
         });
       });
@@ -753,4 +902,5 @@
   </script>
 
 </body>
+
 </html>
